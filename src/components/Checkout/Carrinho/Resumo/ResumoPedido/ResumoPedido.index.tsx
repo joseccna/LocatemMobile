@@ -190,7 +190,11 @@ export default function ResumoPedido({
                   !cepValido && styles.btnInternoDesabilitado,
                 ]}
                 onPress={handleUsarCep}
-                disabled={!cepValido}
+                // M01: com o botão desativado para CEP incompleto, o aviso de
+                // handleUsarCep nunca aparecia. Agora só fica desativado com o
+                // campo vazio; com CEP incompleto, o toque explica o que falta.
+                disabled={!cepTocado}
+                accessibilityState={{ disabled: !cepTocado }}
               >
                 <Text style={styles.btnInternoTexto}>Usar</Text>
               </TouchableOpacity>

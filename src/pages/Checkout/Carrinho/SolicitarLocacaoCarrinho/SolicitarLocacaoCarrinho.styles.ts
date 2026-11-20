@@ -111,6 +111,16 @@ export const styles = StyleSheet.create({
     color: colors.textDark,
   },
 
+  // M01: explica o que falta enquanto o botão principal está desativado.
+  dicaBotao: {
+    width: '100%',
+    marginTop: 12,
+    fontSize: 13,
+    lineHeight: 18,
+    color: '#6b7280',
+    textAlign: 'center',
+  },
+
   acoes: {
     flexDirection: 'row',
     width: '100%',

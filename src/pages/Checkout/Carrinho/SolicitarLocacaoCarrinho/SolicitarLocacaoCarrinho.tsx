@@ -125,6 +125,20 @@ export default function SolicitarLocacaoCarrinho() {
     return null;
   }
 
+  // M01: o botão desativado não dizia o que faltava. Lista os campos vazios
+  // (ou avisa do período inválido) logo acima dos botões.
+  const camposFaltando = [
+    !form.dataEntrega && 'data de entrega',
+    !form.horarioEntrega && 'horário de entrega',
+    !form.dataDevolucao && 'data de devolução',
+    !form.horarioDevolucao && 'horário de devolução',
+  ].filter(Boolean) as string[];
+  const dicaBotao = resumo.formularioCompleto
+    ? null
+    : camposFaltando.length > 0
+      ? `Para continuar, escolha: ${camposFaltando.join(', ')}.`
+      : 'Escolha um período válido para continuar.';
+
   // Cancela a operação e retorna para a tela anterior.
   const handleCancelar = () => {
     navigation.goBack();
@@ -292,6 +306,12 @@ export default function SolicitarLocacaoCarrinho() {
           </View>
         </View>
 
+        {dicaBotao && (
+          <Text style={styles.dicaBotao} accessibilityLiveRegion="polite">
+            {dicaBotao}
+          </Text>
+        )}
+
         <View style={styles.acoes}>
           {/* Cancela a operação e volta para a tela anterior. */}
           <Pressable style={styles.botaoSecundario} onPress={handleCancelar}>
@@ -303,6 +323,8 @@ export default function SolicitarLocacaoCarrinho() {
             style={[styles.botaoPrimario, !resumo.formularioCompleto && styles.botaoDesabilitado]}
             onPress={handleConfirmar}
             disabled={!resumo.formularioCompleto}
+            accessibilityState={{ disabled: !resumo.formularioCompleto }}
+            accessibilityHint={dicaBotao ?? undefined}
           >
             <Text style={styles.botaoTexto}>{textoBotaoPrimario}</Text>
           </Pressable>
