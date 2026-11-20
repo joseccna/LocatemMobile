@@ -143,6 +143,10 @@ export default function SolicitarLocacaoCarrinho() {
     adicionarItem(produto, dados.quantidade, dados.resumo.diarias, {
       data: dados.resumo.dataEntregaFormatada,
       horario: dados.resumo.entregaHorarioFormatado,
+      dataEntregaIso: dados.dataEntrega,
+      horarioEntrega: dados.horarioEntrega,
+      dataDevolucaoIso: dados.dataDevolucao,
+      horarioDevolucao: dados.horarioDevolucao,
     });
 
     // Retorna para a tela anterior após adicionar o item.

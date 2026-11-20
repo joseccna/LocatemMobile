@@ -196,4 +196,71 @@ describe('useProcessandoPagamento', () => {
 
     expect(useLocacaoStore.getState().locacoes).toHaveLength(0);
   });
+
+  it('B01: usa a data e o horário escolhidos e o valor pago com frete', () => {
+    const { api, montarTelaProcessando } = montarHarness();
+
+    act(() => {
+      api.carrinhoStore.adicionarItem(criarProduto({ price: '18,00' }), 6, 3, {
+        data: '12/11/2026',
+        horario: '08:00 às 11:00',
+        dataEntregaIso: '2026-11-12',
+        horarioEntrega: '08:00',
+        dataDevolucaoIso: '2026-11-15',
+        horarioDevolucao: '08:00',
+      });
+      api.pagamentoStore.setMetodoPagamento('pix');
+      // 18 x 6 x 3 = 324 de aluguel + 10 de frete
+      api.pagamentoStore.setValorPagamento(334);
+    });
+
+    montarTelaProcessando();
+    act(() => jest.advanceTimersByTime(5000));
+
+    const [locacao] = useLocacaoStore.getState().locacoes;
+    expect(locacao.dataInicio).toBe('12/11/2026');
+    expect(locacao.horaInicio).toBe('08:00');
+    expect(locacao.dataFim).toBe('15/11/2026');
+    expect(locacao.horaFim).toBe('08:00');
+    expect(locacao.periodo).toBe('12 Nov – 15 Nov 2026');
+    expect(locacao.valor).toBe('R$ 334,00');
+  });
+
+  it('B01: devolução acompanha os dias alterados no carrinho', () => {
+    const { api, montarTelaProcessando } = montarHarness();
+
+    act(() => {
+      api.carrinhoStore.adicionarItem(criarProduto(), 1, 5, {
+        data: '12/11/2026',
+        horario: '08:00 às 11:00',
+        dataEntregaIso: '2026-11-12',
+        horarioEntrega: '08:00',
+        dataDevolucaoIso: '2026-11-15',
+        horarioDevolucao: '09:00',
+      });
+      api.pagamentoStore.setMetodoPagamento('pix');
+    });
+
+    montarTelaProcessando();
+    act(() => jest.advanceTimersByTime(5000));
+
+    const [locacao] = useLocacaoStore.getState().locacoes;
+    expect(locacao.dataFim).toBe('17/11/2026');
+    expect(locacao.horaFim).toBe('09:00');
+  });
+
+  it('B01: sem horário escolhido, a janela nunca passa da meia-noite', () => {
+    jest.setSystemTime(new Date(2026, 10, 9, 23, 30));
+    const { api, montarTelaProcessando } = montarHarness();
+
+    act(() => {
+      api.carrinhoStore.adicionarItem(criarProduto(), 1, 3);
+      api.pagamentoStore.setMetodoPagamento('pix');
+    });
+
+    montarTelaProcessando();
+    act(() => jest.advanceTimersByTime(5000));
+
+    expect(useLocacaoStore.getState().locacoes[0].horaInicio).toBe('20:00');
+  });
 });

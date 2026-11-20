@@ -10,6 +10,12 @@ import type { Produto } from '../../../types/Ferramentas/produto.types';
 export interface EntregaItemCarrinho {
   data: string;
   horario: string;
+  /** Datas (aaaa-mm-dd) e horários de início ("08:00") escolhidos em
+   * "Detalhes da Locação". Usados para criar a locação com o período certo (B01). */
+  dataEntregaIso?: string;
+  horarioEntrega?: string;
+  dataDevolucaoIso?: string;
+  horarioDevolucao?: string;
 }
 
 export interface ItemCarrinho {
