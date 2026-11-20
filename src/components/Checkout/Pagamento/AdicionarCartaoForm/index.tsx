@@ -77,6 +77,7 @@ export function AdicionarCartaoForm({
         value={dados.numero}
         onChangeText={onNumeroChange}
         error={erros.numero}
+        linhasErroReservadas={1}
         prefixo={bandeira ? nomesBandeira[bandeira as Exclude<BandeiraCartao, ''>] : undefined}
       />
 
@@ -89,6 +90,7 @@ export function AdicionarCartaoForm({
         value={dados.nomeTitular}
         onChangeText={onNomeTitularChange}
         error={erros.nomeTitular}
+        linhasErroReservadas={1}
       />
 
       {/* Validade e CVV */}
@@ -104,6 +106,7 @@ export function AdicionarCartaoForm({
             onChangeText={onValidadeChange}
             onBlur={onValidadeBlur}
             error={erros.validade}
+        linhasErroReservadas={2}
           />
         </View>
 
@@ -117,6 +120,7 @@ export function AdicionarCartaoForm({
             value={dados.cvv}
             onChangeText={onCvvChange}
             error={erros.cvv}
+        linhasErroReservadas={2}
           />
         </View>
       </View>

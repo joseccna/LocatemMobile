@@ -25,7 +25,16 @@ export interface FormInputProps extends TextInputProps {
   invalido?: boolean;
   /** Estilo do container (borda/fundo/altura). O `style` vai para o TextInput. */
   containerStyle?: StyleProp<ViewStyle>;
+  /**
+   * M04: reserva o espaço de N linhas para a mensagem de erro, mesmo sem
+   * erro, para os campos e o botão abaixo não mudarem de lugar quando o
+   * aviso aparece. Padrão 0 (comportamento antigo).
+   */
+  linhasErroReservadas?: number;
 }
+
+// Altura de uma linha da mensagem de erro (fontSize 13).
+const ALTURA_LINHA_ERRO = 18;
 
 export default function FormInput({
   label,
@@ -37,6 +46,7 @@ export default function FormInput({
   invalido = false,
   style,
   containerStyle,
+  linhasErroReservadas = 0,
   placeholderTextColor = '#999999',
   editable,
   onFocus,
@@ -118,7 +128,18 @@ export default function FormInput({
       </View>
 
       {/* 3. Mensagem de erro */}
-      {!!error && <Text style={styles.error}>{error}</Text>}
+      {linhasErroReservadas > 0 ? (
+        <Text
+          style={[
+            styles.error,
+            { lineHeight: ALTURA_LINHA_ERRO, minHeight: ALTURA_LINHA_ERRO * linhasErroReservadas },
+          ]}
+        >
+          {error ?? ''}
+        </Text>
+      ) : (
+        !!error && <Text style={styles.error}>{error}</Text>
+      )}
     </Animated.View>
   );
 }

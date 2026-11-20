@@ -156,31 +156,6 @@ export default function LoginScreen() {
             )}
           />
 
-          {/* CARD "DADOS INVÁLIDOS" — aparece embaixo do campo de senha */}
-          {loginErrorMessage && (
-            <Animated.View style={[styles.errorCard, shakeStyle]}>
-              <AlertCircle
-                size={18}
-                color="#dc2626"
-                style={styles.errorCardIcone}
-              />
-
-              <View style={styles.errorCardTextos}>
-                <Text style={styles.errorCardTitulo}>Dados inválidos</Text>
-                <Text style={styles.errorCardMensagem}>
-                  {loginErrorMessage}
-                </Text>
-              </View>
-
-              <TouchableOpacity
-                onPress={dismissLoginError}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <X size={16} color="#b91c1c" />
-              </TouchableOpacity>
-            </Animated.View>
-          )}
-
           <TouchableOpacity
             style={styles.esqueceuSenha}
             onPress={() => navigation.navigate("RecoveryRequisitionScreen")}
@@ -194,6 +169,32 @@ export default function LoginScreen() {
           onPress={handleSignIn}
           disabled={isLoading}
         />
+
+        {/* CARD "DADOS INVÁLIDOS" — M04: fica abaixo do botão "Entrar" para o botão
+            não mudar de lugar quando o aviso aparece. */}
+        {loginErrorMessage && (
+          <Animated.View style={[styles.errorCard, shakeStyle]}>
+            <AlertCircle
+              size={18}
+              color="#dc2626"
+              style={styles.errorCardIcone}
+            />
+
+            <View style={styles.errorCardTextos}>
+              <Text style={styles.errorCardTitulo}>Dados inválidos</Text>
+              <Text style={styles.errorCardMensagem}>
+                {loginErrorMessage}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              onPress={dismissLoginError}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <X size={16} color="#b91c1c" />
+            </TouchableOpacity>
+          </Animated.View>
+        )}
 
         {/* CARD "LOGADO COM SUCESSO!!" — aparece antes de ir pra Home */}
         {loginSuccessMessage && (
