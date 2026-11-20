@@ -16,6 +16,7 @@ import {
   limparSessao,
   salvarSessao,
 } from "../../services/authStorage";
+import { API_URL } from "../../config/api";
 
 interface AuthContextType {
   /** Usuário autenticado ou null quando não existe uma sessão. */
@@ -56,8 +57,6 @@ export function AuthProvider({
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
-
-  const API_URL = "http://10.0.2.2:5033";
 
   /**
    * Reautenticação automática no carregamento inicial.

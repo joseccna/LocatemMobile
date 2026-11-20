@@ -2,8 +2,10 @@
  * Service de infraestrutura: isola persistencia local ou comunicacao HTTP usada pelas telas.
  */
 import { carregarSessao } from './authStorage';
+import { API_URL } from '../config/api';
 
-const API_BASE_URL = 'http://10.0.2.2:5033';
+// Endereço da API: ver src/config/api.ts (M06).
+const API_BASE_URL = API_URL;
 
 export async function listarFerramentas() {
   const sessao = await carregarSessao();

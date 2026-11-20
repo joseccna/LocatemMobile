@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 // Isso mostra que não precisamos descartar regras de negócio que já funcionam, 
 // apenas as integramos dentro de um fluxo mais moderno (Zod).
 import { validateCpf, validateCnpj, validatePassword } from "../../../utils/Auth/validationsCadastro";
+import { API_URL } from "../../../config/api";
 
 // ============================================================================
 // 1. O CONTRATO BASE (ZOD SCHEMA)
@@ -127,9 +128,7 @@ export function useCadastro() {
   // se o botão de "Locatário" ou "Locador" fica destacado e qual máscara usar.
   const currentUserType = watch("userType");
 
-// 10.0.2.2 é o endereço que o emulador Android usa para acessar o
-// "localhost" da máquina host (onde a API .NET/backend está rodando).
-const API_URL = "http://10.0.2.2:5033";
+// Endereço da API: ver src/config/api.ts (M06).
 
   // ============================================================================
   // 5. FUNÇÃO DE SUBMISSÃO (AÇÃO)
