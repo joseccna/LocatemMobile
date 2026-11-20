@@ -21,6 +21,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { CatalogoProvider } from './src/context/Ferramentas/Catalogo/CatalogoContext';
 import { PagamentoProvider } from './src/context/Checkout/Pagamento/PagamentoContext';
 import { AuthProvider } from './src/context/Auth/AuthContext';
+import { SincronizarLocacoes } from './src/hooks/Locacoes/useSincronizarLocacoes';
 
 export default function App() {
   // As telas usam a familia Inter como base visual; enquanto ela carrega,
@@ -45,6 +46,8 @@ export default function App() {
             <CarrinhoProvider>
               <FavoritosProvider>
                 <PagamentoProvider>
+                  {/* Salva "Minhas Locacoes" no aparelho, por usuário (B02). */}
+                  <SincronizarLocacoes />
                   <NavigationContainer>
                       <AppRoutes />
                   </NavigationContainer>

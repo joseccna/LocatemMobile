@@ -1,8 +1,12 @@
 /**
  * Contexto global: compartilha estado e acoes entre telas sem repassar props manualmente.
  */
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
 import type { ReactNode } from 'react';
+
+import { useEstadoPorUsuario } from '../../../hooks/useEstadoPorUsuario';
+
+const semFavoritos = (): number[] => [];
 
 /**
  * Estado global de favoritos (ferramentas salvas pelo usuário para alugar
@@ -22,7 +26,8 @@ export const FavoritosContext = createContext<FavoritosContextType | null>(null)
 
 /** Compartilha a lista de favoritos e as operacoes para atualiza-la. */
 export function FavoritosProvider({ children }: { children: ReactNode }) {
-  const [favoritos, setFavoritos] = useState<number[]>([]);
+  // B02: os favoritos ficam salvos no aparelho, por usuário.
+  const [favoritos, setFavoritos] = useEstadoPorUsuario<number[]>('favoritos', semFavoritos);
 
   /** Verifica se o produto informado esta marcado como favorito. */
   const isFavorito = (id: number) => favoritos.includes(id);
