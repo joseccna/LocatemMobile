@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { perfilSchema, type PerfilFormData } from './perfilSchema';
 import { CADASTRO_MESSAGES } from '../../Cadastro/cadastroMessages';
 import type { Usuario } from '../../../types/Auth/usuario.types';
+import { separarEndereco } from '../../../utils/Formatacao/endereco';
 
 interface ErrorState {
   active: boolean;
@@ -56,9 +57,8 @@ export function useEditarPerfilForm(usuario: Usuario) {
       nome: usuario.nome,
       telefone: usuario.telefone,
       documento: usuario.documento,
-      cep: '',
-      logradouro: usuario.endereco || '',
-      numero: '',
+      // M02: preenche CEP e número a partir do endereço salvo.
+      ...separarEndereco(usuario.endereco),
     },
   });
 

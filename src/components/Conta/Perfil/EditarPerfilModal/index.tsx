@@ -21,6 +21,7 @@ import FormInput from '../../../Shared/Inputs/FormInput/FormInput';
 import BtnPrincipal from '../../../Botoes/BtnPrincipal';
 import type { Usuario } from '../../../../types/Auth/usuario.types';
 import { maskCPF, maskCNPJ, maskPhone, maskCEP } from '../../../../utils/Formatacao/masks';
+import { montarEndereco } from '../../../../utils/Formatacao/endereco';
 import { useEditarPerfilForm } from '../../../../hooks/Conta/Perfil/useEditarPerfilForm';
 import { useFotoPerfil } from '../../../../hooks/Conta/Perfil/useFotoPerfil';
 import type { PerfilFormData } from '../../../../hooks/Conta/Perfil/perfilSchema';
@@ -90,8 +91,9 @@ export default function EditarPerfilModal({
      * Disparada pelo react-hook-form apenas se todos os campos passarem pela validação do Zod.
      */
     const onValidSubmit = (data: PerfilFormData) => {
-        // Concatena os campos separados do formulário em uma única string de endereço
-        const enderecoCompleto = `${data.logradouro}, ${data.numero} - CEP: ${data.cep}`;
+        // Junta os campos no mesmo formato do endereço salvo (M02), para que
+        // abrir e salvar sem mudanças não altere o texto.
+        const enderecoCompleto = montarEndereco(data);
 
         // Envia os dados higienizados para o componente pai
         onSalvar({
