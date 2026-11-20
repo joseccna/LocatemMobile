@@ -414,7 +414,8 @@ export default function AppRoutes() {
 
       <Stack.Screen
         name="Avaliacao"
-        component={Avaliacao}
+        // B04: a tela lista locações do usuário, então exige login.
+        component={withAuthGuard(Avaliacao)}
         options={{
           headerShown: false,
           title: "",
