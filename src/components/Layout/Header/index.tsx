@@ -184,6 +184,20 @@ export default function Header({ cartCount }: HeaderProps) {
             ),
         },
         {
+            // B09: a tela de Favoritos existia, mas nenhum menu levava até ela.
+            label: "Favoritos",
+            route: "FavoritosScreen" as ScreenName,
+            visible: isLocatario,
+            renderIcon: (active) => (
+                <MaterialCommunityIcons
+                    name={active ? "heart" : "heart-outline"}
+                    size={22}
+                    color="#0A0A0A"
+                    style={styles.navItemIcon}
+                />
+            ),
+        },
+        {
             label: "Minhas Ferramentas",
             route: "MinhasFerramentasScreen" as ScreenName,
             visible: isLocador,
