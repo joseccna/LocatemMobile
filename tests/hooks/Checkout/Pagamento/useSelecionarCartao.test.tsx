@@ -17,6 +17,19 @@ function setup(navigate = jest.fn()) {
   return { ...rendered, navigate };
 }
 
+/** Cartões que o próprio usuário salvou (o app não traz mais cartões fixos). */
+const CARTOES_DO_USUARIO = [
+  { id: 1, metodoPagamento: 'credito' as const, bandeira: 'Visa', final: '1234', titular: 'MARIA OLIVEIRA' },
+  { id: 2, metodoPagamento: 'credito' as const, bandeira: 'Mastercard', final: '5678', titular: 'MARIA OLIVEIRA' },
+  { id: 3, metodoPagamento: 'debito' as const, bandeira: 'Visa', final: '9012', titular: 'MARIA OLIVEIRA' },
+  { id: 4, metodoPagamento: 'debito' as const, bandeira: 'Elo', final: '3456', titular: 'MARIA OLIVEIRA' },
+];
+
+/** Salva os cartões de teste no PagamentoContext. */
+function salvarCartoes(result: { current: { pagamentoStore: ReturnType<typeof usePagamentoStore> } | null }) {
+  CARTOES_DO_USUARIO.forEach((cartao) => act(() => result.current!.pagamentoStore.adicionarCartaoSalvo(cartao)));
+}
+
 describe('useSelecionarCartao', () => {
   it('redireciona para "carrinho" quando nenhum método de pagamento foi escolhido', () => {
     const { navigate } = setup();
@@ -38,7 +51,7 @@ describe('useSelecionarCartao', () => {
     expect(navigate).toHaveBeenCalledWith('carrinho');
   });
 
-  it('não redireciona e expõe os 4 cartões padrão filtrados por método (crédito)', () => {
+  it('começa sem cartões: não mostra cartões de outro usuário (B03)', () => {
     const navigate = jest.fn();
     const { result } = renderHook(
       () => ({
@@ -48,6 +61,23 @@ describe('useSelecionarCartao', () => {
       { wrapper: PagamentoWrapper },
     );
 
+    act(() => result.current!.pagamentoStore.setMetodoPagamento('credito'));
+
+    expect(result.current!.pagamentoStore.cartoesSalvos).toHaveLength(0);
+    expect(result.current!.selecionarCartao.cartoesFiltrados).toHaveLength(0);
+  });
+
+  it('não redireciona e expõe os cartões salvos filtrados por método (crédito)', () => {
+    const navigate = jest.fn();
+    const { result } = renderHook(
+      () => ({
+        selecionarCartao: useSelecionarCartao(navigate),
+        pagamentoStore: usePagamentoStore(),
+      }),
+      { wrapper: PagamentoWrapper },
+    );
+
+    salvarCartoes(result);
     const chamadasAntes = navigate.mock.calls.length;
     act(() => result.current!.pagamentoStore.setMetodoPagamento('credito'));
 
@@ -72,6 +102,7 @@ describe('useSelecionarCartao', () => {
       { wrapper: PagamentoWrapper },
     );
 
+    salvarCartoes(result);
     act(() => result.current!.pagamentoStore.setMetodoPagamento('debito'));
 
     expect(result.current!.selecionarCartao.titulo).toBe('Selecionar Cartão de Débito');
@@ -126,6 +157,7 @@ describe('useSelecionarCartao', () => {
       { wrapper: PagamentoWrapper },
     );
 
+    salvarCartoes(result);
     act(() => result.current!.pagamentoStore.setMetodoPagamento('credito'));
     act(() => result.current!.selecionarCartao.selecionarCartao(1));
     act(() => result.current!.selecionarCartao.confirmarPagamento());

@@ -9,6 +9,7 @@ import type {
   CartaoPagamentoArmazenado,
   FormaPagamento,
 } from '../../../types/Checkout/Pagamento/cartao.types';
+import { useEstadoPorUsuario } from '../../../hooks/useEstadoPorUsuario';
 
 // ============================================================
 //  PagamentoContext
@@ -30,14 +31,10 @@ export interface ItemPagamentoAvulso {
   unidades: number;
 }
 
-// Cartões salvos "de fábrica" — mesmos 4 cartões de exemplo usados na Web,
-// só para a tela não ficar vazia enquanto não existe cadastro real vindo da API.
-const CARTOES_PADRAO: Cartao[] = [
-  { id: 1, metodoPagamento: 'credito', bandeira: 'Visa', final: '1234', titular: 'JOÃO SILVA' },
-  { id: 2, metodoPagamento: 'credito', bandeira: 'Mastercard', final: '5678', titular: 'JOÃO SILVA' },
-  { id: 3, metodoPagamento: 'debito', bandeira: 'Visa', final: '9012', titular: 'JOÃO SILVA' },
-  { id: 4, metodoPagamento: 'debito', bandeira: 'Elo', final: '3456', titular: 'JOÃO SILVA' },
-];
+// B03: antes existiam 4 cartões fixos de "JOÃO SILVA", mostrados para
+// qualquer usuário logado. Agora cada usuário começa sem cartões e vê só os
+// que ele mesmo salvou (bandeira, final e titular; nunca número completo ou CVV).
+const semCartoes = (): Cartao[] => [];
 
 interface PagamentoContextType {
   /** Total da compra, definido pelo Carrinho ao continuar para o pagamento. */
@@ -78,7 +75,7 @@ export function PagamentoProvider({ children }: { children: ReactNode }) {
   const [cartao, setCartao] = useState<CartaoPagamentoArmazenado | null>(null);
   const [processado, setProcessado] = useState(false);
   const [itemAvulso, setItemAvulso] = useState<ItemPagamentoAvulso | null>(null);
-  const [cartoesSalvos, setCartoesSalvos] = useState<Cartao[]>(CARTOES_PADRAO);
+  const [cartoesSalvos, setCartoesSalvos] = useEstadoPorUsuario<Cartao[]>('cartoes', semCartoes);
 
   /** Atualiza o valor associado ao pagamento em andamento. */
   function setValorPagamento(novoValor: number) {
