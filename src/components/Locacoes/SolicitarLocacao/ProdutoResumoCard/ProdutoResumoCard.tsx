@@ -7,6 +7,7 @@ import {User} from 'lucide-react-native'
 
 import type { ProdutoSelecionado } from '../../../../context/Ferramentas/Produto/ProdutoContext';
 
+import { calcularResumoAvaliacoes } from '../../../../utils/Avaliacao/avaliacoesResumo';
 import { styles } from './styles';
 
 interface ProdutoResumoCardProps {
@@ -21,11 +22,14 @@ export default function ProdutoResumoCard({
     images,
     categoria,
     locador,
-    rating,
-    reviewCount,
     localizacao,
     price,
   } = produto;
+
+  // B07: usava `rating`/`reviewCount` fixos do mock (ex.: 4,1 com 45
+  // avaliações), diferentes da página do produto (4,0 com 2). Agora calcula a
+  // partir das avaliações reais, como a página do produto e Minhas Locações.
+  const { media: rating, quantidade: reviewCount } = calcularResumoAvaliacoes(produto.avaliacoes);
 
   return (
     <View style={styles.card}>
