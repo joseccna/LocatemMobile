@@ -13,6 +13,7 @@ import { AlertCircle, CheckCircle } from "lucide-react-native";
 
 // Importação das utilidades e máscaras
 import { formatDocument } from "../../../utils/Auth/masksCadastro";
+import { maskPhone } from "../../../utils/Formatacao/masks";
 
 // Componentes personalizados
 import UserTypeCard from "../../../components/Auth/UserTypeCard";
@@ -157,7 +158,9 @@ export default function CadastroScreen() {
                 placeholder="(00) 00000-0000"
                 keyboardType="phone-pad"
                 value={value}
-                onChangeText={onChange}
+                // M05: aplica a máscara (11) 98765-4321 durante a digitação,
+                // como o exemplo do campo e a tela de editar perfil.
+                onChangeText={(texto) => onChange(maskPhone(texto))}
               />
 
               {errors.telefone && (

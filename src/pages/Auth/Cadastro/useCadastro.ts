@@ -155,7 +155,8 @@ export function useCadastro() {
       email: data.email,
       senha: data.password,
       confirmarSenha: data.confirmPassword,
-      telefone: data.telefone,
+      // Envia só os dígitos, como antes da máscara (M05).
+      telefone: data.telefone.replace(/\D/g, ""),
       documento: data.document.replace(/\D/g, ""),
       tipoUsuario: data.userType === "locador" ? 2 : 1,
     }),
