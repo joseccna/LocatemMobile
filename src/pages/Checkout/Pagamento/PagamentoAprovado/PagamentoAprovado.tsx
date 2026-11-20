@@ -62,7 +62,12 @@ export default function PagamentoAprovado({ navigate }: PagamentoAprovadoProps) 
 
         <View style={styles.pickupAlert}>
           <Info size={20} color={colors.success} />
-          <Text style={styles.pickupAlertTexto}>Seu aluguel será entregue em até 3 horas.</Text>
+          {/* B08: antes dizia "entregue em até 3 horas", contradizendo a data agendada logo abaixo. */}
+          <Text style={styles.pickupAlertTexto}>
+            {entrega
+              ? `A entrega está agendada para ${entrega.data} das ${entrega.horario}.`
+              : 'Cada item será entregue no dia e horário escolhidos para ele.'}
+          </Text>
         </View>
 
         <View style={styles.resumoCard}>
