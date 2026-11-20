@@ -107,6 +107,15 @@ describe('derivarMarcas', () => {
     expect(derivarMarcas(produtos)).toEqual(['Bosch', 'DeWalt']);
   });
 
+  it('não lista o nome da loja como marca (M03)', () => {
+    const produtos = [
+      criarProduto({ id: 1, marca: 'JB Ferramentas', locador: 'JB Ferramentas' }),
+      criarProduto({ id: 2, marca: 'Makita', locador: 'JB Ferramentas' }),
+    ];
+
+    expect(derivarMarcas(produtos)).toEqual(['Makita']);
+  });
+
   it('retorna array vazio para catálogo vazio', () => {
     expect(derivarMarcas([])).toEqual([]);
   });

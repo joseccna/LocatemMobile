@@ -62,13 +62,18 @@ export function derivarCategorias(produtos: Produto[]): CategoriaComSubcategoria
  * Marcas únicas presentes no catálogo, na ordem em que aparecem.
  * Derivada dos dados reais (em vez de uma lista fixa) pra nunca ficar
  * dessincronizada conforme novas ferramentas são cadastradas.
+ *
+ * M03: alguns produtos têm o nome da loja no campo `marca` (ex.: "JB
+ * Ferramentas"), e o filtro "Marca" misturava lojas com marcas. Quando a
+ * "marca" é igual à loja (`locador`), ela não entra na lista.
  */
 export function derivarMarcas(produtos: Produto[]): string[] {
   const vistas = new Set<string>();
   const marcas: string[] = [];
 
   for (const produto of produtos) {
-    if (!vistas.has(produto.marca)) {
+    const marcaEhALoja = produto.marca === produto.locador;
+    if (produto.marca && !marcaEhALoja && !vistas.has(produto.marca)) {
       vistas.add(produto.marca);
       marcas.push(produto.marca);
     }
