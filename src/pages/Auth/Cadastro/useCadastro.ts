@@ -99,6 +99,8 @@ export function useCadastro() {
 
   // Mensagem do card verde "Conta Criada com Sucesso!!". null = nenhum sucesso pra mostrar.
   const [cadastroSuccessMessage, setCadastroSuccessMessage] = useState<string | null>(null);
+  // B05: mensagem do card vermelho quando a conta não pode ser criada.
+  const [cadastroErrorMessage, setCadastroErrorMessage] = useState<string | null>(null);
 
   const {
     control,      // "Espião" que conectamos aos Inputs visuais.
@@ -136,6 +138,7 @@ const API_URL = "http://10.0.2.2:5033";
   const handleSignUp = async (data: CadastroFormData) => {
     // Toda nova tentativa começa limpa, sem o card de sucesso da tentativa anterior.
     setCadastroSuccessMessage(null);
+    setCadastroErrorMessage(null);
     setIsLoading(true);
 
     try {
@@ -162,9 +165,12 @@ const API_URL = "http://10.0.2.2:5033";
   console.log(response.status);
 
   if (!response.ok) {
-    // Cadastro não deu certo (e-mail já existe, documento inválido no back-end, etc).
-    // Por enquanto só logamos; se quiser um card vermelho aqui também é só avisar.
-    console.error("Erro ao criar conta. Status:", response.status);
+    // Cadastro recusado (e-mail já existe, documento inválido no back-end, etc).
+    // B05: antes o erro só ia para o console e a tela não mudava.
+    const corpo = await response.json().catch(() => null);
+    setCadastroErrorMessage(
+      corpo?.mensagem || "Não foi possível criar a conta. Confira os dados e tente de novo.",
+    );
     return;
   }
 
@@ -175,7 +181,11 @@ const API_URL = "http://10.0.2.2:5033";
     navigation.navigate("LoginScreen");
   }, 1200);
 } catch (error) {
-  console.error("Erro ao criar conta:", error);
+  // Servidor fora do ar ou sem internet. B05: avisa na tela em vez de só no console.
+  console.warn("Erro ao criar conta:", error);
+  setCadastroErrorMessage(
+    "Não foi possível falar com o servidor. Verifique sua conexão e tente de novo.",
+  );
 } finally {
   setIsLoading(false);
 }
@@ -189,6 +199,7 @@ const API_URL = "http://10.0.2.2:5033";
     currentUserType,
     setValue, 
     cadastroSuccessMessage,
+    cadastroErrorMessage,
     handleSignUp: handleSubmit(handleSignUp),
   };
 }

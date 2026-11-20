@@ -47,6 +47,42 @@ export const styles = StyleSheet.create({
   // ============================================================================
   // CARD "CONTA CRIADA COM SUCESSO!!" (verde)
   // ============================================================================
+  // Card vermelho de erro no cadastro (mesmo visual do card "Dados inválidos" do Login).
+  errorCard: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    backgroundColor: "#ffffff",
+    borderRadius: 14,
+    padding: 14,
+    marginTop: 12,
+    marginBottom: 8,
+    gap: 10,
+    borderLeftWidth: 3,
+    borderLeftColor: "#dc2626",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  errorCardIcone: {
+    marginTop: 2,
+  },
+  errorCardTextos: {
+    flex: 1,
+  },
+  errorCardTitulo: {
+    color: "#111827",
+    fontSize: 14,
+    fontFamily: "Inter_700Bold",
+    marginBottom: 2,
+  },
+  errorCardMensagem: {
+    color: "#6b7280",
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    lineHeight: 18,
+  },
   successCard: {
     flexDirection: "row",
     alignItems: "center",

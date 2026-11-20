@@ -9,7 +9,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { CheckCircle } from "lucide-react-native";
+import { AlertCircle, CheckCircle } from "lucide-react-native";
 
 // Importação das utilidades e máscaras
 import { formatDocument } from "../../../utils/Auth/masksCadastro";
@@ -45,6 +45,7 @@ export default function CadastroScreen() {
     currentUserType,
     setValue,
     cadastroSuccessMessage,
+    cadastroErrorMessage,
     handleSignUp,
   } = useCadastro();
 
@@ -254,6 +255,17 @@ export default function CadastroScreen() {
             </>
           )}
         />
+
+        {/* B05: card vermelho quando a conta não pode ser criada. */}
+        {cadastroErrorMessage && (
+          <View style={styles.errorCard} accessibilityRole="alert">
+            <AlertCircle size={18} color="#dc2626" style={styles.errorCardIcone} />
+            <View style={styles.errorCardTextos}>
+              <Text style={styles.errorCardTitulo}>Não foi possível criar a conta</Text>
+              <Text style={styles.errorCardMensagem}>{cadastroErrorMessage}</Text>
+            </View>
+          </View>
+        )}
 
         <BtnPrincipal
           title={isLoading ? "Carregando..." : "Criar conta"}
