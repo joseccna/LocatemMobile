@@ -21,6 +21,7 @@ import { Acessorios } from './components/Acessorios';
 
 // ── 2. IMPORTAÇÃO DOS HOOKS GLOBAIS (ZUSTAND) E TEMAS ──────────────
 import { useProdutoStore } from '../../../hooks/Ferramentas/useProdutoStore';
+import { useFavoritosStore } from '../../../hooks/Ferramentas/useFavoritosStore';
 import { useNotificationStore } from '../../../hooks/Conta/Notificacoes/useNotificationStore';
 import colors from '../../../theme/colors';
 
@@ -62,8 +63,10 @@ export default function ProductScreen() {
   const [successAberto, setSuccessAberto] = useState(false);
   const [scrollBloqueado, setScrollBloqueado] = useState(false);
   
-  // Estado para o botão de Favoritar
-  const [favoritado, setFavoritado] = useState(false);
+  // Botão de Favoritar. B02: antes era um useState local, que não chegava à
+  // lista de favoritos (tela "Meus Favoritos") e se perdia ao sair da tela.
+  const { isFavorito, alternarFavorito } = useFavoritosStore();
+  const favoritado = isFavorito(produto.id);
 
   const [selecaoProduto, setSelecaoProduto] = useState<{
     quantidade: number;
@@ -124,7 +127,7 @@ export default function ProductScreen() {
               
               <TouchableOpacity
                 style={styles.HeartConteiner}
-                onPress={() => setFavoritado(!favoritado)}
+                onPress={() => alternarFavorito(produto.id)}
                 accessibilityRole="button"
                 accessibilityLabel={favoritado ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
               >
