@@ -31,6 +31,12 @@
           "cameraPermission": "O Locatem usa a câmera para você tirar a foto de perfil e as fotos das suas ferramentas."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6b49a469-7360-4f65-867b-52f518f8bd78"
+      }
+    },
+    "owner": "jose.ccna"
   }
 }
