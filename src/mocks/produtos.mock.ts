@@ -3,6 +3,7 @@
  */
 import type { Produto } from '../types/Ferramentas/produto.types';
 import { ImageSourcePropType } from 'react-native';
+import { calcularResumoAvaliacoes } from '../utils/Avaliacao/avaliacoesResumo';
 
 /**
  * Catálogo central de produtos (ferramentas) mockados.
@@ -27,7 +28,7 @@ import { ImageSourcePropType } from 'react-native';
  * limitam onde ele aparece.
  */
 
-export const PRODUTOS_MOCK: Produto[] = [
+const PRODUTOS_BASE: Produto[] = [
     // ── Catálogo principal (Home) ───────────────────────────────────────
     {
         id: 1,
@@ -728,4 +729,18 @@ export const PRODUTOS_MOCK: Produto[] = [
     },
 ];
 
+/**
+ * B07: os campos fixos `rating`/`reviewCount` não batiam com as avaliações
+ * reais de cada ferramenta (ex.: Aparador com 4.1 (45) no card e 4.0 (2) na
+ * página do produto). Quando a ferramenta tem avaliações, a nota e a
+ * quantidade passam a vir delas, para todas as telas mostrarem o mesmo número
+ * (cards, favoritos, ordenação e filtro por estrelas).
+ */
+function comNotaDasAvaliacoes(produto: Produto): Produto {
+    if (!produto.avaliacoes || produto.avaliacoes.length === 0) return produto;
 
+    const { media, quantidade } = calcularResumoAvaliacoes(produto.avaliacoes);
+    return { ...produto, rating: media, reviewCount: quantidade };
+}
+
+export const PRODUTOS_MOCK: Produto[] = PRODUTOS_BASE.map(comNotaDasAvaliacoes);
